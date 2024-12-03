@@ -56,7 +56,7 @@ class JogadorController{
             j.nickname = req.body.nickname;
             j.senha = req.body.senha;
             j.pontos = req.body.pontos;  
-            //j.patentes = req.body.patentes;          
+            j.patentes = req.body.patentes;          
             j.endereco = result; 
                         
             await repository.save(j);//efetiva a operacao de insert do jogador.
@@ -95,7 +95,59 @@ class JogadorController{
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    async delete(req: Request, res: Response){
+
+        const repository = getRepository(Jogador);//recupera o repositorio do jogador.
+        
+        const nickname = req.params.nickname;
+        
+        const nicknameExists = await repository.findOne({where :{nickname}});//consulta na tabela se existe um registro com o mesmo nickname da mensagem.
+
+        if(nicknameExists){
+        
+            await repository.remove(nicknameExists);//caso exista, então aplica a remocao fisica. (corrigir erro no pdf 11)
+            return res.sendStatus(204);//retorna o coigo 204.
+        
+        }else{
+        
+            return res.sendStatus(404);//se nao encontrar jogador para remover, retorna o codigo 404.
+        }
+    }
+
+
+
     
+    async update(req: Request, res: Response){
+    
+        const repository = getRepository(Jogador);//recupera o repositorio do jogador.
+    
+        const {nickname} = req.body;//extrai os atributos id do corpo da mensagem
+    
+        const nicknameExists = await repository.findOne({where :{nickname}});//consulta na tabela se existe um registro com o mesmo nickname.
+        
+        if(!nicknameExists){
+            return res.sendStatus(404);
+        }
+        
+        const j = repository.create(req.body); //cria a entidade Jogador
+        
+        await repository.save(j); //persiste (update) a entidade na tabela.
+        
+        return res.json(j);
+    }
+
+
 
 
 
