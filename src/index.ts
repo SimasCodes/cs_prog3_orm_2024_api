@@ -6,6 +6,21 @@ import './database/connect';
 const app = express();//inicializa a constante app com o express
 app.use(express.json());//define o formato das mensagens
 
+
+
+
+const cors = require('cors');
+app.use(cors({
+    origin: '*'
+}));
+
+
+
+
+
+
+
+
 app.use(routes); // defini o roteador para as requisições
 //liberação para aceitar requisições de qualquer origem, com qualquer conteudo e via os metodos get e post
 app.use(function(req, res, next) {
